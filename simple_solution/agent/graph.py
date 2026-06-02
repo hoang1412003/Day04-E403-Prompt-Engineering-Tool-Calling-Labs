@@ -89,17 +89,22 @@ def build_tools(store: OrderDataStore):
         """Save order."""
         payload = _coerce_object(order_payload)
         items = _coerce_items(payload.get("items", []))
+        
+        # Handle cases where LLM passes None explicitly for these fields
+        discount_rate_raw = payload.get("discount_rate")
+        discount_rate = float(discount_rate_raw) if discount_rate_raw is not None else 0.0
+        
         result = store.save_order(
-            customer_name=str(payload.get("customer_name", "")),
-            customer_phone=str(payload.get("customer_phone", "")),
-            customer_email=str(payload.get("customer_email", "")),
-            shipping_address=str(payload.get("shipping_address", "")),
+            customer_name=str(payload.get("customer_name") or ""),
+            customer_phone=str(payload.get("customer_phone") or ""),
+            customer_email=str(payload.get("customer_email") or ""),
+            shipping_address=str(payload.get("shipping_address") or ""),
             items=items,
-            detail_token=str(payload.get("detail_token", "")),
-            discount_rate=float(payload.get("discount_rate", 0.0)),
-            campaign_code=str(payload.get("campaign_code", "")),
-            customer_tier=str(payload.get("customer_tier", "standard")),
-            notes=str(payload.get("notes", "")),
+            detail_token=str(payload.get("detail_token") or ""),
+            discount_rate=discount_rate,
+            campaign_code=str(payload.get("campaign_code") or ""),
+            customer_tier=str(payload.get("customer_tier") or "standard"),
+            notes=str(payload.get("notes") or ""),
         )
         return json.dumps(result, ensure_ascii=False)
 
