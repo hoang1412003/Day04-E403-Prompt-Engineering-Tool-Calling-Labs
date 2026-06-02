@@ -40,15 +40,6 @@ def build_chat_model(
             temperature=temperature,
             google_api_key=os.getenv("GOOGLE_API_KEY"),
         )
-    # if provider == "openai":
-    #     from langchain_openai import ChatOpenAI
-
-    #     return ChatOpenAI(
-    #         model=model_name or os.getenv("LLM_MODEL", "deepseek-v4-flash"),
-    #         openai_api_base=os.getenv("OPENAI_API_BASE", "https://opencode.ai/zen/go/v1"),
-    #         openai_api_key=os.getenv("OPENAI_API_KEY", "sk-MCkLdiMLeEi443oKQ3IipGBuiup7k28wpabKS3Sk3BbKwHT0w5vC7Vgjdkjkv8Xa"),
-    #         temperature=temperature,
-    #     )
     if provider == "custom":
         from langchain_openai import ChatOpenAI
         return ChatOpenAI(
